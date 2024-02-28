@@ -17,4 +17,6 @@ public interface CourseService {
     void addCourse(CourseRequestToCreate request);
 
     void deleteCourseById(Long id);
+
+    List<Course> getCoursesByTitleWithPrefix(String prefix);
 }

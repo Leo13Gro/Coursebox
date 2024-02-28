@@ -8,13 +8,13 @@ import ru.kuimov.coursebox.entity.Course;
 import ru.kuimov.coursebox.repository.CourseRepository;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
 public class CourseServiceImpl implements CourseService{
 
     private final CourseRepository courseRepository;
-
 
     @Override
     public List<Course> getAllCourses() {
@@ -23,12 +23,12 @@ public class CourseServiceImpl implements CourseService{
 
     @Override
     public Course getCourseById(Long id) {
-        return courseRepository.findById(id).orElseThrow();
+        return courseRepository.findById(id).orElseThrow(() -> new NoSuchElementException("No courses with this ID"));
     }
 
     @Override
     public void updateCourseById(Long id, CourseRequestToUpdate request) {
-        Course courseToUpdate = courseRepository.findById(id).orElseThrow();
+        Course courseToUpdate = getCourseById(id);
         courseToUpdate.setAuthor(request.getAuthor());
         courseToUpdate.setTitle(request.getTitle());
         courseRepository.save(courseToUpdate);
@@ -44,5 +44,12 @@ public class CourseServiceImpl implements CourseService{
     @Override
     public void deleteCourseById(Long id) {
         courseRepository.deleteById(id);
+    }
+
+    @Override
+    public List<Course> getCoursesByTitleWithPrefix(String prefix) {
+        return getAllCourses().stream()
+                .filter(course -> course.getTitle().startsWith(prefix))
+                .toList();
     }
 }

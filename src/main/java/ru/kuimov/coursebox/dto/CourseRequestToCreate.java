@@ -1,5 +1,6 @@
 package ru.kuimov.coursebox.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,6 +11,9 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CourseRequestToCreate {
+    @NotBlank
     private String author;
+
+    @NotBlank
     private String title;
 }
